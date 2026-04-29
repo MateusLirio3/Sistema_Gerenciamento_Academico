@@ -1,6 +1,6 @@
-# Sistema de Boletins Escolar
+# Sistema de Gerenciamento Escolar
 
-O sistema consiste em um site web onde é possivel importar planilhas do excel de turmas e gerenciar o envio de boletins assim com ver informações gerais sobre todas as turmas, alunos e notas dos alunos.
+O sistema consiste em uma aplicação web onde é possivel gerenciar turmas
 
 # Features
 
