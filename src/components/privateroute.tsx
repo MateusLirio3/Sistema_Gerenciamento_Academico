@@ -1,8 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, Outlet } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
-export default function PrivateRoute({ children }: { children: React.ReactNode }) {
+interface Props {
+  children?: React.ReactNode
+}
+
+export default function PrivateRoute({ children }: Props) {
   const [loading, setLoading] = useState(true)
   const [authed, setAuthed] = useState(false)
 
@@ -13,6 +17,16 @@ export default function PrivateRoute({ children }: { children: React.ReactNode }
     })
   }, [])
 
-  if (loading) return <div>Carregando...</div>
-  return authed ? <>{children}</> : <Navigate to="/login" />
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="text-sm text-gray-400">Carregando...</div>
+      </div>
+    )
+  }
+
+  if (!authed) return <Navigate to="/login" />
+
+  // Suporta tanto children direto quanto Outlet (para uso como Route element)
+  return children ? <>{children}</> : <Outlet />
 }

@@ -30,16 +30,25 @@ export default function Importar() {
   }
 
   async function handlePreview() {
-    const todasNotas: NotaImportada[] = []
-    for (const file of arquivos) {
-      const buffer = await file.arrayBuffer()
-      const notas = parseArquivoBoletim(buffer)
-      todasNotas.push(...notas)
-    }
-    setPreview(todasNotas)
-    setStatus('preview')
+  const todasNotas: NotaImportada[] = []
+
+  for (const file of arquivos) {
+    const buffer = await file.arrayBuffer()
+
+    const notas = parseArquivoBoletim(buffer, 1)  // Só primeira etapa por enquanto
+
+    console.log('Arquivo:', file.name)
+    console.log('Notas extraídas:', notas.length)
+    console.log(notas.slice(0, 5))
+
+    todasNotas.push(...notas)
   }
 
+  console.log('TOTAL FINAL:', todasNotas.length)
+
+  setPreview(todasNotas)
+  setStatus('preview')
+}
   async function handleImportar() {
     setStatus('importando')
     setProgresso(0)
@@ -69,7 +78,7 @@ export default function Importar() {
       {/* Header */}
       <HeaderComVoltar 
         titulo="Importar planilhas"
-        onVoltar={() => navigate('/')}
+        onVoltar={() => navigate(-1)}
       />
       <p className="text-sm text-gray-400 -mt-4">
         Selecione um ou mais arquivos .xlsx para importar as notas
