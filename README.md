@@ -1,5 +1,4 @@
-# Sistema de Gerenciamento Escolar
-
+# Sistema de Gerenciamento Acadêmico
 O sistema consiste em uma aplicação web onde é possivel gerenciar turmas
 
 # Features
