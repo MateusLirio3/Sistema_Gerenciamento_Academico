@@ -87,8 +87,15 @@ export default function Alunos() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {alunos.map((aluno) => (
-                <AlunoRow key={aluno.id} aluno={aluno} turmas={turmas} notas={notas} />
+              {[...alunos]
+                .sort((a, b) =>a.nome.localeCompare(b.nome, 'pt-BR', { numeric: true, sensitivity: 'base' }))
+                .map((aluno) => (
+                  <AlunoRow
+                    key={aluno.id}
+                    aluno={aluno}
+                    turmas={turmas}
+                    notas={notas}
+                  />
               ))}
             </tbody>
           </table>

@@ -20,7 +20,7 @@ const menu = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/Dashboard' },
   { label: 'Turmas', icon: BookOpen, to: '/turmas' },
   { label: 'Alunos', icon: '/alunos', to: '/alunos' },
-  { label: 'Notas', icon: ClipboardList, to: '/disciplinas' },
+  { label: 'Notas', icon: ClipboardList, to: '/lancamento-notas' },
   { label: 'Importação', icon: Upload, to: '/importar' },
   { label: 'Boletins', icon: FileDown, to: '/boletins' },
 ]
@@ -29,7 +29,7 @@ const menuItems = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/Dashboard' },
   { label: 'Turmas', icon: BookOpen, to: '/turmas' },
   { label: 'Alunos', icon: UsersRound, to: '/alunos' },
-  { label: 'Notas', icon: ClipboardList, to: '/disciplinas' },
+  { label: 'Notas', icon: ClipboardList, to: '/lancamento-notas' },
   { label: 'Importação', icon: Upload, to: '/importar' },
   { label: 'Boletins', icon: FileDown, to: '/boletins' },
 ]

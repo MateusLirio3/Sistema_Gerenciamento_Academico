@@ -43,11 +43,19 @@ export default function Boletins() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50">
-              {alunos.map((aluno) => {
+              {[...alunos]
+              .sort((a, b) =>
+                a.nome.localeCompare(b.nome, 'pt-BR', {
+                  numeric: true,
+                  sensitivity: 'base',
+                })
+              )
+              .map((aluno) => {
                 const turma = turmas.find((t) => t.id === aluno.turma_id)
                 const notasAluno = notas.filter(
                   (n) => n.aluno_id === aluno.id && n.nota !== null
                 )
+
                 const media = notasAluno.length
                   ? notasAluno.reduce((sum, n) => sum + Number(n.nota), 0) / notasAluno.length
                   : null

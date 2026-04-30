@@ -33,7 +33,7 @@ export default function App() {
           <Route path="/turmas/:id" element={<Turma />} />
           <Route path="/alunos" element={<Alunos />} />
           <Route path="/aluno/:id" element={<Aluno />} />
-          <Route path="/disciplinas" element={<LancamentoNotas />} />
+          <Route path="/lancamento-notas" element={<LancamentoNotas />} />
           <Route path="/importar" element={<Importar />} />
           <Route path="/boletins" element={<Boletins />} />
         </Route>

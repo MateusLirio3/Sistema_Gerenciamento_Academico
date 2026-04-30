@@ -32,7 +32,6 @@ export default function Turma() {
     if (id) carregarDados()
   }, [id])
 
-  // 🔥 busca só uma vez
   async function carregarDados() {
     try {
       setLoading(true)
@@ -70,7 +69,7 @@ export default function Turma() {
         })
       })
 
-      setDisciplinas(Array.from(todasDisciplinas))
+      setDisciplinas(Array.from(todasDisciplinas).sort((a, b) => a.localeCompare(b, 'pt-BR')))
       setAlunosRaw(alunosData || [])
 
     } catch (err) {
@@ -81,7 +80,6 @@ export default function Turma() {
     }
   }
 
-  // 🔥 filtra sem refetch
   useEffect(() => {
     const processados: Aluno[] = alunosRaw.map(aluno => {
       let notas = aluno.notas || []
@@ -111,7 +109,6 @@ export default function Turma() {
     setAlunos(processados)
   }, [disciplina, alunosRaw])
 
-  // métricas
   const mediaNota = alunos.length
     ? (alunos.reduce((a, b) => a + b.nota, 0) / alunos.length).toFixed(1)
     : '0'
@@ -122,7 +119,7 @@ export default function Turma() {
 
   const alunosOrdenados = [...alunos].sort((a, b) => {
     const dir = orderDir === 'asc' ? 1 : -1
-    if (orderBy === 'nome') return a.nome.localeCompare(b.nome) * dir
+    if (orderBy === 'nome') return a.nome.localeCompare(b.nome, 'pt-BR') * dir
     if (orderBy === 'nota') return (a.nota - b.nota) * dir
     return (a.frequencia - b.frequencia) * dir
   })
@@ -145,7 +142,7 @@ export default function Turma() {
     <div className="flex flex-col gap-6">
       <HeaderComVoltar 
         titulo={nomeTurma || 'Carregando...'}
-        onVoltar={() => navigate('/Dashboard')}
+        onVoltar={() => navigate('/')}
       />
 
       {/* filtro */}
@@ -153,7 +150,6 @@ export default function Turma() {
         <p className="text-sm text-gray-400">
           {disciplina === 'todas' ? 'Todas disciplinas' : disciplina}
         </p>
-
         <select
           value={disciplina}
           onChange={(e) => setDisciplina(e.target.value)}
@@ -218,11 +214,28 @@ export default function Turma() {
                 {alunosOrdenados.map((a, i) => (
                   <tr
                     key={a.id}
-                    className={`border-t hover:bg-gray-50 ${i % 2 ? 'bg-gray-50' : ''}`}
+                    onClick={() => navigate(`/aluno/${a.id}`)}
+                    className={`border-t cursor-pointer hover:bg-blue-50 transition-colors ${i % 2 ? 'bg-gray-50' : ''}`}
                   >
-                    <td className="px-4 py-3">{a.nome}</td>
-                    <td className="px-4 py-3 text-center">{a.frequencia}%</td>
-                    <td className="px-4 py-3 text-center">
+                    <td className="px-4 py-3 font-medium text-gray-900">{a.nome}</td>
+                    <td className={`px-4 py-3 text-center font-medium ${
+                      a.frequencia >= 75
+                        ? 'text-green-600'
+                        : a.frequencia >= 60
+                        ? 'text-amber-600'
+                        : 'text-red-600'
+                    }`}>
+                      {a.frequencia}%
+                    </td>
+                    <td className={`px-4 py-3 text-center font-medium ${
+                      a.nota >= 7
+                        ? 'text-green-600'
+                        : a.nota >= 5
+                        ? 'text-amber-600'
+                        : a.nota > 0
+                        ? 'text-red-600'
+                        : 'text-gray-400'
+                    }`}>
                       {a.nota > 0 ? a.nota.toFixed(1) : '-'}
                     </td>
                   </tr>
@@ -234,4 +247,4 @@ export default function Turma() {
       )}
     </div>
   )
-} 
+}
