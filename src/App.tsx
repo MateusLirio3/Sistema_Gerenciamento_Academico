@@ -12,6 +12,10 @@ import Aluno from './pages/Aluno'
 import LancamentoNotas from './pages/LancamentoNotas'
 import Importar from './pages/Importar'
 import Boletins from './pages/Boletins'
+import Disciplinas from './pages/Disciplinas'
+import Areas from './pages/Areas'
+import BoletimPage from './pages/Boletimpage'
+import VincularDisciplina from './pages/VincularDisciplinas'
 
 export default function App() {
   return (
@@ -36,6 +40,10 @@ export default function App() {
           <Route path="/lancamento-notas" element={<LancamentoNotas />} />
           <Route path="/importar" element={<Importar />} />
           <Route path="/boletins" element={<Boletins />} />
+          <Route path='/disciplinas' element={<Disciplinas />} />
+          <Route path='/areas' element={<Areas />} />
+          <Route path='/boletim/:alunoID' element={<BoletimPage />} />
+          <Route path='/vincular-disciplina' element={<VincularDisciplina />} />
         </Route>
       </Routes>
     </BrowserRouter>

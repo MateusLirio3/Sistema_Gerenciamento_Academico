@@ -23,6 +23,9 @@ const menu = [
   { label: 'Notas', icon: ClipboardList, to: '/lancamento-notas' },
   { label: 'Importação', icon: Upload, to: '/importar' },
   { label: 'Boletins', icon: FileDown, to: '/boletins' },
+  { label: 'Disciplinas', icon: BookOpen, to: '/disciplinas' },
+  { label: 'Áreas', icon: GraduationCap, to: '/areas' },
+  { label: 'Vincular disciplina', icon: GraduationCap, to: '/vincular-disciplina' }
 ]
 
 const menuItems = [
@@ -32,6 +35,10 @@ const menuItems = [
   { label: 'Notas', icon: ClipboardList, to: '/lancamento-notas' },
   { label: 'Importação', icon: Upload, to: '/importar' },
   { label: 'Boletins', icon: FileDown, to: '/boletins' },
+  { label: 'Disciplinas', icon: BookOpen, to: '/disciplinas' },
+  { label: 'Áreas', icon: GraduationCap, to: '/areas' },
+  { label: 'Vincular disciplina', icon: GraduationCap, to: '/vincular-disciplina' }
+
 ]
 
 export default function Layout() {
@@ -44,7 +51,7 @@ export default function Layout() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="h-screen overflow-hidden bg-gray-50 flex ">
       {/* Overlay mobile */}
       {sidebarOpen && (
         <div
@@ -57,9 +64,9 @@ export default function Layout() {
       <aside
         className={`
           fixed top-0 left-0 z-30 h-full w-64 bg-[#0f1623] text-white flex flex-col
-          transition-transform duration-300
-          ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-          lg:translate-x-0 lg:static lg:z-auto
+           transition-transform duration-300
+            ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+            lg:translate-x-0 lg:static lg:z-auto lg:h-full
         `}
       >
         {/* Logo */}
@@ -152,7 +159,7 @@ export default function Layout() {
         </header>
 
         {/* Content */}
-        <main className="flex-1 space-y-6 p-4 md:p-8">
+        <main className="flex-1 space-y-6 p-4 md:p-8 overflow-y-auto">
           <Outlet />
         </main>
       </div>

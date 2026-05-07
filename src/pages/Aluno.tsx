@@ -84,7 +84,7 @@ export default function Aluno() {
     : 0
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 py-4">
       <HeaderComVoltar
         titulo={nomeAluno || 'Carregando...'}
         onVoltar={() => navigate(-1)}
