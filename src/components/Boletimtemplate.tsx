@@ -54,6 +54,63 @@ function TabelaArea({
   if (disciplinas.length === 0) return null;
   const conceito = AREAS_CONCEITO.has(titulo);
 
+  function AreaLabel({ titulo, linhas }: { titulo: string; linhas: number }) {
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const altura = linhas * 28;
+  const largura = 16;
+
+  // Quebra o título em linhas de no máximo 3 palavras
+  const palavras = titulo.split(" ");
+  const linhasTexto: string[] = [];
+  for (let i = 0; i < palavras.length; i += 3) {
+    linhasTexto.push(palavras.slice(i, i + 3).join(" "));
+  }
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = largura * dpr;
+    canvas.height = altura * dpr;
+    canvas.style.width = `${largura}px`;
+    canvas.style.height = `${altura}px`;
+
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, largura, altura);
+    ctx.font = "bold 6px sans-serif";
+    ctx.fillStyle = "#000000";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.save();
+    ctx.translate(largura / 2, altura / 2);
+    ctx.rotate(-Math.PI / 2);
+
+    // Espaçamento entre linhas de texto (em px, no eixo rotacionado)
+    const lineHeight = 7;
+    const totalTextHeight = (linhasTexto.length - 1) * lineHeight;
+
+    linhasTexto.forEach((linha, idx) => {
+      const offsetY = -totalTextHeight / 2 + idx * lineHeight;
+      ctx.fillText(linha, 0, offsetY);
+    });
+
+    ctx.restore();
+  }, [titulo, altura, linhasTexto.join("|")]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{ display: "block", width: largura, height: altura }}
+    />
+  );
+}
+
+
+  
   return (
     <table className="w-full border-collapse text-[7.5px] mb-1">
       <thead>
@@ -114,40 +171,23 @@ function TabelaArea({
         {disciplinas.map((disc, i) => (
           <tr key={disc.disciplina_id}>
             {/* Célula de área com texto vertical — apenas na primeira linha */}
-              {i === 0 && (
-  <td
-    className="border border-black bg-gray-50 align-middle"
-    rowSpan={disciplinas.length}
-    style={{ width: 16, minWidth: 16, padding: 0 }}
-  >
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: 16,
-        height: "100%",
-        minHeight: disciplinas.length * 14,
-        overflow: "hidden",
-      }}
-    >
-      <span
-        style={{
-          fontSize: 6,
-          fontWeight: "bold",
-          whiteSpace: "nowrap",
-          lineHeight: 1,
-          display: "block",
-          transform: "rotate(-90deg)",
-          transformOrigin: "center center",
-          maxWidth: disciplinas.length * 14,
-        }}
-      >
-        {titulo}
-      </span>
-    </div>
-  </td>
-)}
+
+        
+            {i === 0 && (
+              <td
+                className="border border-black bg-gray-50 align-middle"
+                rowSpan={disciplinas.length}
+                style={{
+                  width: 16,
+                  minWidth: 16,
+                  maxWidth: 16,
+                  padding: 0,
+                }}
+              >
+                <AreaLabel titulo={titulo} linhas={disciplinas.length} />
+              </td>
+            )}
+
             <td className="border border-black px-0.5 text-[7.5px]">{disc.disciplina_nome}</td>
             <td className="border border-black px-0.5 text-center text-[7.5px]">
               {fmtFreq(disc.frequencia)}

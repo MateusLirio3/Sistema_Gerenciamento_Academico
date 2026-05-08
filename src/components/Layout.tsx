@@ -76,8 +76,7 @@ export default function Layout() {
               <GraduationCap className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className="text-xs text-white/50">Sistema Escolar</p>
-              <h1 className="text-base font-bold leading-tight">Gestão Acadêmica</h1>
+              <p className="text-xs text-white/10">Sistema de Gerenciamento Acadêmico</p>
             </div>
           </div>
         </div>
