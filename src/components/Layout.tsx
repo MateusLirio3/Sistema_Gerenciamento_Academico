@@ -76,7 +76,7 @@ export default function Layout() {
               <GraduationCap className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className="text-xs text-white/10">Sistema de Gerenciamento Acadêmico</p>
+              <p className="text-xs text-white/100">Sistema de Gerenciamento Acadêmico</p>
             </div>
           </div>
         </div>

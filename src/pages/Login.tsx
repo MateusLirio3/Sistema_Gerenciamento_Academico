@@ -34,7 +34,7 @@ export default function Login() {
           </div>
           <div>
             <p className="text-sm font-medium text-gray-900 leading-none">ISEPAM</p>
-            <p className="text-xs text-gray-400 leading-none mt-1">Sistema de Boletins</p>
+            <p className="text-xs text-gray-400 leading-none mt-1">Sistema de Gerenciamento Academico</p>
           </div>
         </div>
 

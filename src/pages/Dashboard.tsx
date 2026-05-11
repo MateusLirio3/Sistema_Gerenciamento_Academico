@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
   ClipboardList,
@@ -54,9 +54,9 @@ function TurmasPanel({
     <div className="rounded-xl border border-gray-200 bg-white">
       <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
         <h2 className="text-lg font-semibold text-gray-900">Turmas em andamento</h2>
-        <button className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+        <Link to="/turmas" className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors" >
           Nova turma
-        </button>
+        </Link>
       </div>
       <div className="divide-y divide-gray-100">
         {turmas.length === 0 ? (
@@ -285,12 +285,6 @@ export default function Dashboard() {
     { label: 'Turmas ativas', value: String(turmas.length), detail: 'cadastradas', icon: BookOpen },
     { label: 'Alunos', value: String(alunos.length), detail: 'matriculados', icon: UsersRound },
     {
-      label: 'Notas lançadas',
-      value: String(notas.length),
-      detail: `média ${formatNumber(mediaGeral)}`,
-      icon: ClipboardList,
-    },
-    {
       label: 'Boletins prontos',
       value: String(boletinsEstimados),
       detail: 'alunos com nota',
@@ -301,7 +295,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Stats */}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {stats.map((stat) => (
           <StatCard key={stat.label} {...stat} />
         ))}
