@@ -7,7 +7,8 @@ import {
   Upload,
   CheckCircle2,
 } from 'lucide-react'
-import { useSchoolData, formatNumber, type Turma, type Aluno, type Nota } from '../hooks/useSchoolData'
+import { useSchoolData, formatNumber, type Turma, type Aluno, type Nota, type TurmaDisciplina } from '../hooks/useSchoolData'
+import { useTurmaProgress } from '../hooks/useTurmaProgress'
 import { LoadingState, ErrorState, EmptyState } from '../components/States'
 
 // ─── StatCard ─────────────────────────────────────────────────────────────────
@@ -45,16 +46,20 @@ function TurmasPanel({
   turmas,
   alunos,
   notas,
+  turmaDisciplinas,
 }: {
   turmas: Turma[]
   alunos: Aluno[]
   notas: Nota[]
+  turmaDisciplinas: TurmaDisciplina[]
 }) {
+  const turmaProgresses = useTurmaProgress(turmas, alunos, notas, turmaDisciplinas)
+
   return (
     <div className="rounded-xl border border-gray-200 bg-white">
       <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
         <h2 className="text-lg font-semibold text-gray-900">Turmas em andamento</h2>
-        <Link to="/turmas" className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors" >
+        <Link to="/turmas" className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
           Nova turma
         </Link>
       </div>
@@ -62,48 +67,35 @@ function TurmasPanel({
         {turmas.length === 0 ? (
           <EmptyState text="Nenhuma turma cadastrada." />
         ) : (
-          turmas.map((turma) => {
-            const alunosTurma = alunos.filter((a) => a.turma_id === turma.id)
-            const alunosComNota = new Set(
-              notas
-                .filter((n) => alunosTurma.some((a) => a.id === n.aluno_id))
-                .map((n) => n.aluno_id)
-            ).size
-            const progress = alunosTurma.length
-              ? Math.round((alunosComNota / alunosTurma.length) * 100)
-              : 0
-            const pendencias = Math.max(alunosTurma.length - alunosComNota, 0)
-
-            return (
-              <div
-                key={turma.id}
-                className="grid gap-3 px-6 py-4 md:grid-cols-[1fr_auto_auto] md:items-center"
-              >
-                <div>
-                  <p className="font-semibold text-gray-900">{turma.nome}</p>
-                  <p className="text-sm text-gray-400">
-                    Ano {turma.ano} · {alunosTurma.length} alunos
-                  </p>
-                </div>
-                <span
-                  className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                    progress < 80 ? 'bg-amber-50 text-amber-700' : 'bg-green-50 text-green-700'
-                  }`}
-                >
-                  {pendencias} pendências
-                </span>
-                <div className="min-w-[8rem]">
-                  <div className="h-1.5 rounded-full bg-gray-100">
-                    <div
-                      className="h-1.5 rounded-full bg-[#185FA5] transition-all"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                  <p className="mt-1 text-right text-xs text-gray-400">{progress}%</p>
-                </div>
+          turmaProgresses.map(({ turma, alunosTurma, progress, pendencias }) => (
+            <div
+              key={turma.id}
+              className="grid gap-3 px-6 py-4 md:grid-cols-[1fr_auto_auto] md:items-center"
+            >
+              <div>
+                <p className="font-semibold text-gray-900">{turma.nome}</p>
+                <p className="text-sm text-gray-400">
+                  Ano {turma.ano} · {alunosTurma.length} alunos
+                </p>
               </div>
-            )
-          })
+              <span
+                className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                  progress < 80 ? 'bg-amber-50 text-amber-700' : 'bg-green-50 text-green-700'
+                }`}
+              >
+                {pendencias} pendências
+              </span>
+              <div className="min-w-[8rem]">
+                <div className="h-1.5 rounded-full bg-gray-100">
+                  <div
+                    className="h-1.5 rounded-full bg-[#185FA5] transition-all"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <p className="mt-1 text-right text-xs text-gray-400">{progress}%</p>
+              </div>
+            </div>
+          ))
         )}
       </div>
     </div>
@@ -276,10 +268,8 @@ export default function Dashboard() {
   const turmas = data?.turmas ?? []
   const alunos = data?.alunos ?? []
   const notas = data?.notas ?? []
+  const turmaDisciplinas = data?.turmaDisciplinas ?? []
   const boletinsEstimados = new Set(notas.map((n) => n.aluno_id).filter(Boolean)).size
-  const mediaGeral = notas.length
-    ? notas.reduce((sum, n) => sum + Number(n.nota ?? 0), 0) / notas.length
-    : 0
 
   const stats = [
     { label: 'Turmas ativas', value: String(turmas.length), detail: 'cadastradas', icon: BookOpen },
@@ -303,7 +293,7 @@ export default function Dashboard() {
 
       {/* Turmas + Ações */}
       <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-        <TurmasPanel turmas={turmas} alunos={alunos} notas={notas} />
+        <TurmasPanel turmas={turmas} alunos={alunos} notas={notas} turmaDisciplinas={turmaDisciplinas} />
         <AcoesPanel turmas={turmas.length} alunos={alunos.length} notas={notas.length} />
       </div>
 
