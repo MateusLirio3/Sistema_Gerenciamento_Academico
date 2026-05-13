@@ -48,7 +48,7 @@ interface AlunoFormData {
 
 interface ModalProps {
   turmas: Turma[]
-  aluno?: Aluno | null          // se definido: modo edição
+  aluno?: Aluno | null  
   onClose: () => void
   onSaved: () => void
 }

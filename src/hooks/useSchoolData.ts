@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
 export type Turma = { id: string; nome: string; ano: number }
-export type Aluno = { id: string; nome: string; turma_id: string | null }
+export type Aluno = { id: string; nome: string; matricula: number | null; turma_id: string | null }
 export type Nota = {
   id: string
   aluno_id: string | null
@@ -33,7 +33,7 @@ export function useSchoolData() {
       const [turmasRes, alunosRes, notasRes, disciplinasRes, turmaDisciplinasRes] =
         await Promise.all([
           supabase.from('turmas').select('id,nome,ano').order('ano', { ascending: false }).order('nome'),
-          supabase.from('alunos').select('id,nome,turma_id').order('nome'),
+          supabase.from('alunos').select('id,nome,matricula,turma_id').order('nome'),
           supabase.from('notas').select('id,aluno_id,disciplina_id,etapa,nota,frequencia'),
           supabase.from('disciplinas').select('id,nome,area_id').order('nome'),
           supabase.from('turma_disciplinas').select('id,turma_id,disciplina_id'),
